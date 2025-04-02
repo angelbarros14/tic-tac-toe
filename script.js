@@ -12,6 +12,12 @@ const game = (function () {
                 console.log(event.target.id)
                 gameboard[index] = currentPlayer;
                 console.log(gameboard)
+
+            currentPlayer = currentPlayer == "X" ? "O" : "X"
+
+            // check if the cell is already clicked
+            // check if all the cell is clicked
+            // 
             })
         })
     }
