@@ -26,22 +26,26 @@ const game = (function () {
                 const index = parseInt(event.target.id);
                 // check if the cell is already clicked
                 if (gameboard[index] !== "") {
-
                     return;
                 }
 
+                if (!gameStatus) {
+                    return;
+                }
+                
                 cell.textContent = currentPlayer;
                 gameboard[index] = currentPlayer;
-                currentPlayer = currentPlayer == "X" ? "O" : "X"
-                display();
-
                 if (win()) {
-                    const status = document.querySelector("p")
-                    status.textContent =  `Player ${currentPlayer} wins`
+                    gameStatus = false;
+                    return;
                 }
 
+                currentPlayer = currentPlayer == "X" ? "O" : "X"
+                display();
+   
                 console.log(event.target.id)
                 console.log(gameboard)
+
 
             })
         })
@@ -62,19 +66,20 @@ const game = (function () {
 
         for (let pattern of winningPatterns) {
             const [a, b, c] = pattern;
+            // if pattern a is same as b and c AND if pattern in any is not ""
             if (gameboard[a] == gameboard[b] && gameboard[a] == gameboard[c] && gameboard[a] != "") {
+                const status = document.querySelector("p")
+                status.textContent =  `Player ${currentPlayer} wins`
                 console.log("this is a win");
                 gameStatus = false;
+                return true;
             }
+
         }
-       return false;
     }
 
-
     return {
-        initialize,
-        reset,
-        win
+        initialize
     };
 
 })();
