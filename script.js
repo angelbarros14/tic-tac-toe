@@ -10,8 +10,10 @@ const game = (function () {
             gameboard= ["", "", "", "", "", "", "", "", ""];
             currentPlayer = "X";
             gameStatus = true;
+            display();
             cell.forEach(cell => {
                 cell.textContent="";
+                cell.style.backgroundColor = "white";
             })
         })
         
@@ -54,7 +56,15 @@ const game = (function () {
     function display() {
         const status = document.querySelector("p")
         status.textContent = `Player ${currentPlayer}'s turn`;
-  
+
+        if (reset()) {
+            status.textContent = `Player ${currentPlayer}'s turn`;
+        }
+
+        if (!gameboard.includes("")) {
+            status.textContent = "It's a tie";
+            gameStatus = false;
+        }
     }
 
     function win() {
@@ -69,12 +79,15 @@ const game = (function () {
             // if pattern a is same as b and c AND if pattern in any is not ""
             if (gameboard[a] == gameboard[b] && gameboard[a] == gameboard[c] && gameboard[a] != "") {
                 const status = document.querySelector("p")
+                const cells = document.querySelectorAll(".cell");
+                pattern.forEach(cell => {
+                    cells[cell].style.backgroundColor = "#E6FFE6";
+                })
                 status.textContent =  `Player ${currentPlayer} wins`
                 console.log("this is a win");
                 gameStatus = false;
                 return true;
             }
-
         }
     }
 
