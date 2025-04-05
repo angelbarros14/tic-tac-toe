@@ -3,54 +3,56 @@ const game = (function () {
     let currentPlayer = "X";
     let gameStatus = true;
     let status;
+    let cells;
 
     function reset() {
-        const cell = document.querySelectorAll(".cell") 
-        const resetButton = document.getElementById("reset")
+        const resetButton = document.getElementById("reset");
         resetButton.addEventListener("click", () => {
             gameboard= ["", "", "", "", "", "", "", "", ""];
             currentPlayer = "X";
             gameStatus = true;
-            display();
-            cell.forEach(cell => {
+            display(`Player ${currentPlayer}'s turn`);
+
+            cells.forEach(cell => {
                 cell.textContent="";
                 cell.style.backgroundColor = "white";
             })
-        })
-        
+        })   
     }
 
     function initialize() {
         status = document.querySelector("p");
-        const cell = document.querySelectorAll(".cell") 
-        cell.forEach(cell => {
-            cell.addEventListener("click", (event) => {
-                const index = parseInt(event.target.id);
-                // check if the cell is already clicked
-                if (gameboard[index] !== "") {
-                    return;
-                }
+        cells = document.querySelectorAll(".cell");
 
-                if (!gameStatus) {
+        cells.forEach(cell => {
+            // if cell is clicked
+            cell.addEventListener("click", (event) => {
+                // find the index of the clicked cell
+                const index = parseInt(event.target.id);
+                // if the cell that's clicked is not an empty cell or if the game is over, ignore the click
+                if (gameboard[index] !== "" || !gameStatus  
+                ) {
                     return;
                 }
                 
+        
+                // initial is X
                 cell.textContent = currentPlayer;
+                // if cell is clicked, switch player
+                toggle();
+                // add to gameboard array the current player
                 gameboard[index] = currentPlayer;
-                if (win()) {
-                    gameStatus = false;
-                    return;
-                }
-
-                currentPlayer = currentPlayer == "X" ? "O" : "X"
-                display(`Player ${currentPlayer}'s turn`);
-   
-                console.log(event.target.id)
-                console.log(gameboard)
-
-
+                
+                draw();
+                win();  
+                reset();
             })
         })
+    }
+    
+    function toggle() {
+        currentPlayer = currentPlayer == "X" ? "O" : "X"
+        display(`Player ${currentPlayer}'s turn`);
     }
 
     function display(message) {
@@ -75,7 +77,6 @@ const game = (function () {
             const [a, b, c] = pattern;
             // if pattern a is same as b and c AND if pattern in any is not ""
             if (gameboard[a] == gameboard[b] && gameboard[a] == gameboard[c] && gameboard[a] != "") {
-                const cells = document.querySelectorAll(".cell");
                 pattern.forEach(cell => {
                     cells[cell].style.backgroundColor = "#E6FFE6";
                 })
@@ -116,5 +117,9 @@ when does display change?
 when a player switches or when cell is clicked
 when a player wins
 when game is draw
+when game is reset
+*/
 
+/*
+move dom references that will be populated
 */
