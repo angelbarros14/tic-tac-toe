@@ -2,6 +2,7 @@ const game = (function () {
     let gameboard = ["", "", "", "", "", "", "", "", ""];
     let currentPlayer = "X";
     let gameStatus = true;
+    let status;
 
     function reset() {
         const cell = document.querySelectorAll(".cell") 
@@ -19,9 +20,8 @@ const game = (function () {
         
     }
 
-    reset();
-
     function initialize() {
+        status = document.querySelector("p");
         const cell = document.querySelectorAll(".cell") 
         cell.forEach(cell => {
             cell.addEventListener("click", (event) => {
@@ -43,7 +43,7 @@ const game = (function () {
                 }
 
                 currentPlayer = currentPlayer == "X" ? "O" : "X"
-                display();
+                display(`Player ${currentPlayer}'s turn`);
    
                 console.log(event.target.id)
                 console.log(gameboard)
@@ -53,16 +53,13 @@ const game = (function () {
         })
     }
 
-    function display() {
-        const status = document.querySelector("p")
-        status.textContent = `Player ${currentPlayer}'s turn`;
+    function display(message) {
+        status.textContent = message;
+    }
 
-        if (reset()) {
-            status.textContent = `Player ${currentPlayer}'s turn`;
-        }
-
+    function draw() {
         if (!gameboard.includes("")) {
-            status.textContent = "It's a tie";
+            display("It's a tie")
             gameStatus = false;
         }
     }
@@ -78,13 +75,11 @@ const game = (function () {
             const [a, b, c] = pattern;
             // if pattern a is same as b and c AND if pattern in any is not ""
             if (gameboard[a] == gameboard[b] && gameboard[a] == gameboard[c] && gameboard[a] != "") {
-                const status = document.querySelector("p")
                 const cells = document.querySelectorAll(".cell");
                 pattern.forEach(cell => {
                     cells[cell].style.backgroundColor = "#E6FFE6";
                 })
-                status.textContent =  `Player ${currentPlayer} wins`
-                console.log("this is a win");
+                display(`Player ${currentPlayer} wins`);
                 gameStatus = false;
                 return true;
             }
@@ -98,3 +93,28 @@ const game = (function () {
 })();
 
 game.initialize();
+
+/*
+refactor:
+function for checking winner
+function for checking draw
+function for switching player
+function for updating player status
+function for highlighting winning cells
+function for reset game
+function for handling cell clicks
+    if cell is filled
+    if game has winner
+    if game is draw
+    updating cell content
+    updating switching player
+function for initializing game
+*/
+
+/*
+when does display change?
+when a player switches or when cell is clicked
+when a player wins
+when game is draw
+
+*/
